@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Garage
+﻿namespace Garage
 {
     class Motorcycle : Vehicle
     {
@@ -12,6 +10,6 @@ namespace Garage
             CylinderVolume = cylinderVolume;
         }
 
-        public override string ToString() => String.Format("Motorcycle:{0}{1}{0}{2} cc", Environment.NewLine, base.ToString(), CylinderVolume);
+        public override string ToString() => System.String.Format("Motorcycle:{0}{1}{0}{2} cc", System.Environment.NewLine, base.ToString(), CylinderVolume);
     }
 }

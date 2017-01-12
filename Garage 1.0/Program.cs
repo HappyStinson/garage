@@ -16,6 +16,8 @@ namespace Garage
             garage.Add(new Airplane("ABC 123", "Black", 16, 4));
             garage.Add(new Airplane("DEVIL 666", "Red", 666, 666));
             garage.Add(new Motorcycle("VR 46", "Valencia yellow", 1000));
+            garage.Add(new Car("CAR 345", "Blue", FuelType.Diesel));
+            garage.Add(new Car("TESLA 345", "Silver", FuelType.Electric));
 
             garage.ListAllVehicles();
 

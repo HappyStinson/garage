@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Garage
+﻿namespace Garage
 {
     class Airplane : Vehicle
     {
@@ -12,6 +10,6 @@ namespace Garage
             EngineCount = engineCount;
         }
 
-        public override string ToString() => String.Format("Airplane:{0}{1}{0}{2} engines", Environment.NewLine, base.ToString(), EngineCount);
+        public override string ToString() => System.String.Format("Airplane:{0}{1}{0}{2} engines", System.Environment.NewLine, base.ToString(), EngineCount);
     }
 }

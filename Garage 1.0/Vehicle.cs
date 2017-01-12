@@ -16,7 +16,7 @@
         public override string ToString()
         {
             
-            return System.String.Format("Registration plate: {1}{0}{2}{0}{3} wheels", System.Environment.NewLine, RegistrationPlate, Color, WheelCount);
+            return string.Format("Registration plate: {1}{0}{2}{0}{3} wheels", System.Environment.NewLine, RegistrationPlate, Color, WheelCount);
         }
     }
 }

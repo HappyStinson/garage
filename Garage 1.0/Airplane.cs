@@ -10,6 +10,6 @@
             EngineCount = engineCount;
         }
 
-        public override string ToString() => System.String.Format("Airplane:{0}{1}{0}{2} engines", System.Environment.NewLine, base.ToString(), EngineCount);
+        public override string ToString() => string.Format("Airplane:{0}{1}{0}{2} engines", System.Environment.NewLine, base.ToString(), EngineCount);
     }
 }

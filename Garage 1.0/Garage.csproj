@@ -7,8 +7,8 @@
     <ProjectGuid>{93816695-51B4-45A1-A017-2909FFE6BFFA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Garage_1._0</RootNamespace>
-    <AssemblyName>Garage 1.0</AssemblyName>
+    <RootNamespace>Garage</RootNamespace>
+    <AssemblyName>Garage</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Airplane.cs" />
+    <Compile Include="Garage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vehicle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

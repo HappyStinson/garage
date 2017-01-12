@@ -4,12 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Garage_1._0
+namespace Garage
 {
     class Program
     {
         static void Main(string[] args)
         {
+            //Console.WriteLine("Enter garage capacity: ");
+            var capacity = 10;
+            var garage = new Garage<Vehicle>(capacity);
+            garage.Add(new Airplane("ABC 123", "Black", 16, 4));
+            garage.Add(new Airplane("DEVIL 666", "Red", 666, 666));
+
+            garage.ListAllVehicles();
+
         }
     }
 }

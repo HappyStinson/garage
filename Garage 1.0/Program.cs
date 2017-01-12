@@ -18,6 +18,8 @@ namespace Garage
             garage.Add(new Motorcycle("VR 46", "Valencia Yellow", 1000));
             garage.Add(new Car("CAR 345", "Blue", FuelType.Diesel));
             garage.Add(new Car("TESLA 345", "Silver", FuelType.Electric));
+            garage.Add(new Boat("MARY 35", "Silver", 35f, isSailingBoat: true));
+            garage.Add(new Boat("LISA 125", "Brown", 12.5f));
 
             var cityBus = new Bus("CITY LINE 10", "Leaf Green", 45);
             var schoolBus = new Bus("WEST ELEMENTARY", "Yellow", 25, isSchoolBus: true);

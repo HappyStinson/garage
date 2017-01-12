@@ -28,12 +28,35 @@ namespace Garage
 
             //garage.ListAllVehicles();
 
-            cityBus.RegisterAsSchoolBus();
-            schoolBus.RegisterAsCityBus();
+            //cityBus.RegisterAsSchoolBus();
+            //schoolBus.RegisterAsCityBus();
 
-            //garage.ListAllVehicles();
+            ////garage.ListAllVehicles();
 
-            garage.ListVehicleTypes();
+            //garage.ListVehicleTypes();
+
+            //var v1 = garage.SearchVehicle("CAR 345");
+            
+            //if (v1 != null)
+            //    Console.WriteLine(v1);
+            //else
+            //    Console.WriteLine("No match");
+
+            //var v2 = garage.SearchVehicle("LISA 345");
+            //if (v2 != null)
+            //    Console.WriteLine(v2);
+            //else
+            //    Console.WriteLine("No match");
+
+            // Next test
+            var matches = garage.SearchVehicle("YeLloW", 2);
+            if (matches.Count() > 1)
+                foreach (var item in matches)
+                {
+                    Console.WriteLine(item);
+                }
+            else
+                Console.WriteLine("No match");
         }
     }
 }

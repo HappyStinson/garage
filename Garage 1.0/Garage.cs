@@ -84,20 +84,33 @@ namespace Garage
                 Console.WriteLine($"{type.Count} {type.Vehicle}{s}");
             }
         }
+        
+        public Vehicle SearchVehicle(string registrationPlate)
+        {
+            var match = vehicles
+                .Where(v => v != null && v.RegistrationPlate.Equals(registrationPlate)).FirstOrDefault();
 
-        // Möjlighet att söka efter ett specifikt fordon via Reg-nr
+            return match;
+        }
 
         // Möjlighet att söka efter ett flertal fordon på ett flertal valfria variabler.
+        public Vehicle[] SearchVehicle(string color, int wheelCount)
+        {
+            var matches = vehicles
+                .Where(v => v != null)
+                .Where(v => v.Color.ToLowerInvariant().Contains(color.ToLowerInvariant()))
+                .Where(v => v.WheelCount >= wheelCount)
+                .ToArray();
+
+            return matches;
+        }
+
+        // public void ListAllEnvironmentalCars() // FuelType.Electric / Ethanol
 
         public IEnumerator<T> GetEnumerator()
         {
             foreach (var vehicle in vehicles.Where(v => v != null))
-            {
-                //if (vehicle is Airplane)
-                //    yield return vehicle as Airplane;
-
                 yield return (T)vehicle;
-            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

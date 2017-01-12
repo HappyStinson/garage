@@ -8,8 +8,8 @@
 
         public Vehicle(string registrationPlate, string color, int wheelCount)
         {
-            RegistrationPlate = registrationPlate;
-            Color = color;
+            RegistrationPlate = registrationPlate.ToUpperInvariant();
+            Color = color.ToLowerInvariant();
             WheelCount = wheelCount;
         }
 

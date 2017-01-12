@@ -58,6 +58,7 @@ namespace Garage
             foreach (var vehicle in vehicles)
             {
                 Console.WriteLine(vehicle);
+                Console.WriteLine();
             }
         }
 

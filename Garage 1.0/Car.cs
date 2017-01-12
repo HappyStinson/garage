@@ -25,7 +25,9 @@
 
         private string FormatFuelType()
         {
-            var formatted = FuelType.ToString().ToLowerInvariant();
+            var fuelTypeString = FuelType.ToString();
+            var formatted = char.ToLowerInvariant(fuelTypeString[0]) + fuelTypeString.Substring(1);
+
             if (FuelType == FuelType.Electric)
                 formatted += "ity"; // Electric -> electricity
 

@@ -51,19 +51,39 @@ namespace Garage
             return null;
         }
 
-        // Möjlighet att lista samtliga fordon i garaget.
-        public void ListAllVehicles() // change return type to string?
+        public void ListAllVehicles() // change return type to string? ListParkedVehicles?
         {
             Console.WriteLine("Listing all vehicles");
-            foreach (var vehicle in vehicles)
+            foreach (var vehicle in vehicles.Where(v => v != null))
             {
                 Console.WriteLine(vehicle);
                 Console.WriteLine();
             }
         }
 
-        // Möjlighet att lista samtliga olika typer av fordon i garaget och hur många
-        // av dessa som står i garaget
+        public void ListVehicleTypes()
+        {
+            var types = vehicles
+                .Where(v => v != null)
+                .GroupBy(v => v.GetType().Name)
+                .Select(v => new {
+                    Count = v.Count(),
+                    Vehicle = v.Key
+                })
+                .OrderByDescending(x => x.Count);
+
+            Console.WriteLine($"{Count} vehicles is stored in the Garage{System.Environment.NewLine}");
+            foreach (var type in types)
+            {
+                string s = "";
+                if (type.Count > 1)
+                {
+                    if (type.Vehicle == "Bus") s = "es";
+                    else s = "s";
+                }
+                Console.WriteLine($"{type.Count} {type.Vehicle}{s}");
+            }
+        }
 
         // Möjlighet att söka efter ett specifikt fordon via Reg-nr
 

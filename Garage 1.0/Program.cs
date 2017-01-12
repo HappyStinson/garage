@@ -26,12 +26,14 @@ namespace Garage
             garage.Add(cityBus);
             garage.Add(schoolBus);
 
-            garage.ListAllVehicles();
+            //garage.ListAllVehicles();
 
             cityBus.RegisterAsSchoolBus();
             schoolBus.RegisterAsCityBus();
 
-            garage.ListAllVehicles();
+            //garage.ListAllVehicles();
+
+            garage.ListVehicleTypes();
         }
     }
 }

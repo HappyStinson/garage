@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Garage
 {
@@ -23,7 +20,8 @@ namespace Garage
 
     class Program
     {
-        static Garage<Vehicle> garage = new Garage<Vehicle>(10);
+        private static Garage<Vehicle> garage = new Garage<Vehicle>(10);
+        private static string log { get; set; }
 
         static void Main(string[] args)
         {
@@ -33,9 +31,9 @@ namespace Garage
                 quit = MainMenu();
             } while (quit != true);
 
-            
-            
-            
+
+
+
             //garage.Add(new Airplane("DEVIL 666", "REd", 666, 666));
             //garage.Add(new Motorcycle("VR 46", "Valencia YeLloW", 1000));
             //garage.Add(new Car("CAR 345", "blUE", FuelType.Diesel));
@@ -48,7 +46,7 @@ namespace Garage
             //garage.Add(cityBus);
             //garage.Add(schoolBus);
 
-            //SearchVehicle(garage, "YeLloW", 2);
+            //SearchVehicle(garage, "YeLloW", 0);
             //SearchVehicle(garage, "yellow", 2);
             //SearchVehicle(garage, "Yellow", 2);
             //SearchVehicle(garage, "YELLOW", 2);
@@ -86,6 +84,12 @@ namespace Garage
 
             // Debug prints
             Console.WriteLine($"Capacity: {garage.Capacity}");
+            Console.WriteLine($"First Vehicle: {garage.FirstOrDefault()}");
+            Console.WriteLine();
+            // </Debug>
+
+            Console.WriteLine("--| GARAGE 1.0 MAIN MENU |--" + Environment.NewLine);
+            PrintLog();
 
             Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
                 + "\n1. Open a new Garage (this will replace the current Garage)"
@@ -93,52 +97,131 @@ namespace Garage
                 + "\n3. Unpark a parked vehicle"
                 + "\n4. Search for vehicles parked in the garage"
                 + "\n5. List the vehicles parked in the garage"
-                + "\n0. Quit the application");
-            char input = ' '; //Creates the character input to be used with the switch-case below.
-            try
-            {
-                input = Console.ReadLine()[0]; //Tries to set input to the first char in an input line
-            }
-            catch (IndexOutOfRangeException) //If the input line is empty, we ask the users for some input.
-            {
-                Console.Clear();
-                Console.WriteLine("Please enter some input!"); // Never enters here?
-            }
+                + "\n0. Quit the application\n");
 
-            Console.Clear();
+            var input = AskForInt("Your choice: ");
+
             var quit = false;
             switch (input)
             {
-                case '1':
+                case 1:
+                    Console.Clear();
                     OpenGarage();
                     break;
-                case '2':
+                case 2:
                     ParkVehicleMenu();
+                    //ParkAirplane();
                     break;
-                case '3':
+                case 3:
                     UnparkVehicleMenu();
                     break;
-                case '4':
+                case 4:
                     SearchVehiclesMenu();
                     break;
-                case '5':
+                case 5:
                     ListVehiclesMenu();
                     break;
-                case '0':
+                case 0:
                     quit = true;
                     break;
                 default:
-                    Console.WriteLine("Please enter some valid input (0, 1, 2, 3, 4)");
+                    Log("Not a valid choice.");
                     break;
             }
 
             return quit;
         }
 
+        private static void PrintLog()
+        {
+            Console.WriteLine(Environment.NewLine + log);
+            log = "";
+        }
+
+        private static void Log(string message)
+        {
+            log += message + Environment.NewLine;
+        }
+
         private static void OpenGarage()
         {
+            Console.WriteLine("--| OPENING NEW GARAGE |--" + Environment.NewLine);
             var capacity = AskForInt("Enter the number of parking slots: ", unsigned: true);
             garage = new Garage<Vehicle>(capacity);
+        }
+
+        private static int ParkVehicleMenu()
+        {
+            Console.Clear();
+
+            Console.WriteLine("--| PARK VECHICLE |--" + Environment.NewLine);
+            PrintLog();
+
+            Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
+                + "\n1. Park an Airplane"
+                + "\n2. Park a Motorcycle"
+                + "\n3. Park a Car"
+                + "\n4. Park a Bus"
+                + "\n5. Park a Boat"
+                + "\n9. Back to previous menu"
+                + "\n0. Quit the application");
+
+            var input = AskForInt("Your choice: ");
+
+            var quit = 0;
+            switch (input)
+            {
+                case 1:
+                    Console.Clear();
+                    ParkAirplane();
+                    break;
+                //case 2:
+                //    ParkMotorcycle();
+                //    break;
+                //case 3:
+                //    ParkCar();
+                //    break;
+                //case 4:
+                //    ParkBus();
+                //    break;
+                //case 5:
+                //    ParkBoat();
+                //    break;
+                //case 9:
+                //    break;
+                case 0:
+                    quit = 1;
+                    break;
+                default:
+                    Log("Park Vehicle - default");
+                    break;
+            }
+
+            return quit;
+        }
+
+        private static void ParkAirplane()
+        {
+            Console.WriteLine("-- PARKING AIRPLANE --" + Environment.NewLine);
+            var properties = AskForVehicleProperties(mandatoryWheels: false);
+            var engineCount = AskForInt("Enter the number of engines: ");
+
+            var airplane = new Airplane(properties.RegistrationPlate,
+                                        properties.Color,
+                                        properties.WheelCount,
+                                        engineCount);
+            garage.Add(airplane);
+        }
+
+        private static VehicleProperties AskForVehicleProperties(bool mandatoryWheels = true)
+        {
+            var registrationPlate = AskForString("Enter registration plate: ");
+            var color = AskForString("Enter color: ");
+            var wheelCount = AskForInt("Enter the number of wheels: ", mandatoryWheels);
+
+            var properties = new VehicleProperties(registrationPlate,
+                                                   color, wheelCount);
+            return properties;
         }
 
         private static int AskForInt(string question, bool unsigned = false)
@@ -155,10 +238,10 @@ namespace Garage
                 if (unsigned && value < 1)
                 {
                     parsed = false;
-                    error = "Incorrect input. You must enter a positive integer.\n";
+                    error = "\nIncorrect input. You must enter a positive integer.\n";
                 }
                 else
-                    error = "Incorrect input. You must enter an integer.\n";
+                    error = "\nIncorrect input. You must enter an integer.\n";
 
             } while (!parsed);
 
@@ -167,8 +250,20 @@ namespace Garage
 
         private static string AskForString(string question)
         {
-            Console.Write(question);
-            return Console.ReadLine();
+            string input;
+            bool parsed = false;
+            string error = "";
+
+            do
+            {
+                Console.Write(error + question);
+                input = Console.ReadLine();
+                parsed = !string.IsNullOrWhiteSpace(input);
+                error = "\nIncorrect input. You must enter some text.\n";
+
+            } while (!parsed);
+
+            return input.Trim();
         }
 
         private static void ListVehiclesMenu()
@@ -190,82 +285,6 @@ namespace Garage
             Console.Clear();
             Console.WriteLine("List vehicles sub menu");
             Console.ReadKey();
-        }
-
-        private static int ParkVehicleMenu()
-        {
-            Console.Clear();
-            Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
-                + "\n1. Park an Airplane"
-                + "\n2. Park a Motorcycle"
-                + "\n3. Park a Car"
-                + "\n4. Park a Bus"
-                + "\n5. Park a Boat"
-                + "\n9. Back to previous menu"
-                + "\n0. Quit the application");
-            char input = ' '; //Creates the character input to be used with the switch-case below.
-            try
-            {
-                input = Console.ReadLine()[0]; //Tries to set input to the first char in an input line
-            }
-            catch (IndexOutOfRangeException) //If the input line is empty, we ask the users for some input.
-            {
-                Console.Clear();
-                Console.WriteLine("Please enter some input!"); // Never enters here?
-            }
-
-            var quit = 0;
-            switch (input)
-            {
-                case '1':
-                    ParkAirplane();
-                    break;
-                //case '2':
-                //    ParkMotorcycle();
-                //    break;
-                //case '3':
-                //    ParkCar();
-                //    break;
-                //case '4':
-                //    ParkBus();
-                //    break;
-                //case '5':
-                //    ParkBoat();
-                //    break;
-                //case '9':
-                //    break;
-                case '0':
-                    quit = 1;
-                    break;
-                default:
-                    Console.WriteLine("Please enter some valid input (0, 1, 2, 3, 4)");
-                    break;
-            }
-
-            return quit;
-        }
-
-        private static void ParkAirplane()
-        {
-            var properties = AskForVehicleProperties();
-            var engineCount = AskForInt("Enter the number of engines: ");
-
-            var airplane = new Airplane(properties.RegistrationPlate,
-                                        properties.Color,
-                                        properties.WheelCount,
-                                        engineCount);
-            garage.Add(airplane);
-        }
-
-        private static VehicleProperties AskForVehicleProperties()
-        {
-            var registrationPlate = AskForString("Enter registration plate: ");
-            var color = AskForString("Enter color: ");
-            var wheelCount = AskForInt("Enter the number of wheels: ");
-
-            var properties = new VehicleProperties(registrationPlate,
-                                                   color, wheelCount);
-            return properties;
         }
 
         private static void SearchVehicle(Garage<Vehicle> garage, string color, int wheelCount)

@@ -10,6 +10,15 @@
             EngineCount = engineCount;
         }
 
-        public override string ToString() => string.Format("Airplane:{0}{1}{0}{2} engines", System.Environment.NewLine, base.ToString(), EngineCount);
+        public override string ToString()
+        {
+            var formatted = string.Format("Airplane:{0}{1}{0}", System.Environment.NewLine, base.ToString());
+
+            if (EngineCount > 0)
+                formatted += $"{System.Environment.NewLine}{EngineCount} engines";
+            //formatted += $"{System.Environment.NewLine}Gliderplane without engine";
+                
+            return formatted;
+        }
     }
 }

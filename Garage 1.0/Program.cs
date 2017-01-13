@@ -137,11 +137,11 @@ namespace Garage
 
         private static void OpenGarage()
         {
-            var capacity = AskForInt("Enter the number of parking slots: ");
+            var capacity = AskForInt("Enter the number of parking slots: ", unsigned: true);
             garage = new Garage<Vehicle>(capacity);
         }
 
-        private static int AskForInt(string question)
+        private static int AskForInt(string question, bool unsigned = false)
         {
             int value;
             bool parsed = false;
@@ -151,7 +151,15 @@ namespace Garage
             {
                 string input = AskForString(error + question);
                 parsed = int.TryParse(input, out value);
-                error = "Felaktig inmatning!\n";
+
+                if (unsigned && value < 1)
+                {
+                    parsed = false;
+                    error = "Incorrect input. You must enter a positive integer.\n";
+                }
+                else
+                    error = "Incorrect input. You must enter an integer.\n";
+
             } while (!parsed);
 
             return value;

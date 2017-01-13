@@ -88,7 +88,8 @@ namespace Garage
         public Vehicle SearchVehicle(string registrationPlate)
         {
             var match = vehicles
-                .Where(v => v != null && v.RegistrationPlate.Equals(registrationPlate)).FirstOrDefault();
+                .Where(v => v != null && v.RegistrationPlate.Equals(registrationPlate))
+                .FirstOrDefault();
 
             return match;
         }

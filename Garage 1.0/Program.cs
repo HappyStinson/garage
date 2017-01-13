@@ -113,7 +113,8 @@ namespace Garage
                     //ParkAirplane();
                     break;
                 case 3:
-                    UnparkVehicleMenu();
+                    Console.Clear();
+                    UnparkVehicle();
                     break;
                 case 4:
                     SearchVehiclesMenu();
@@ -280,11 +281,24 @@ namespace Garage
             Console.ReadKey();
         }
 
-        private static void UnparkVehicleMenu()
+        private static void UnparkVehicle()
         {
-            Console.Clear();
-            Console.WriteLine("List vehicles sub menu");
-            Console.ReadKey();
+            Console.WriteLine("--| UNPARK VECHICLE |--" + Environment.NewLine);
+
+            if (garage.Count > 0)
+            {
+                var result = garage.SearchVehicle(AskForString("Enter registration plate: "));
+
+                if (result != null)
+                {
+                    if (garage.Remove(result) != null)
+                        Log($"Successfully unparked {result}");
+                }
+                else
+                    Log("No matching vehicle found in garage. Has it been stolen? ='(");
+            }
+            else
+                Log("The garage is empty. Did you really park here? :O");
         }
 
         private static void SearchVehicle(Garage<Vehicle> garage, string color, int wheelCount)

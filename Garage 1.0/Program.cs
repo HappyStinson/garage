@@ -195,6 +195,26 @@ namespace Garage
             garage.Add(airplane);
         }
 
+        private static void UnparkVehicle()
+        {
+            Console.WriteLine("--| UNPARK VEHICLE |--" + Environment.NewLine);
+
+            if (garage.Count > 0)
+            {
+                var result = garage.SearchMatchingVehicle(AskForString("Enter registration plate: "));
+
+                if (result != null)
+                {
+                    if (garage.Remove(result) != null)
+                        Log($"Successfully unparked {result}");
+                }
+                else
+                    Log("No matching vehicle found in garage. Has it been stolen? ='(");
+            }
+            else
+                Log("The garage is empty. Did you really park here? :O");
+        }
+
         private static VehicleProperties AskForVehicleProperties(bool mandatoryWheels = true)
         {
             var registrationPlate = AskForString("Enter registration plate: ");
@@ -321,6 +341,7 @@ namespace Garage
                     SearchVehicleByRegistrationPlate();
                     break;
                 case 2:
+                    SearchVehicleByColorWheelCount();
                     break;
                 case 0:
                     quit = 1;
@@ -361,39 +382,23 @@ namespace Garage
             }
         }
 
-        private static void UnparkVehicle()
+        private static void SearchVehicleByColorWheelCount()
         {
-            Console.WriteLine("--| UNPARK VEHICLE |--" + Environment.NewLine);
+            var color = AskForString("Enter color: ");
+            var wheelCount = AskForInt("Enter the number of wheels: ");
+            Log($"{color} vehicle with at least {wheelCount} wheels in the garage: {Environment.NewLine}");
 
-            if (garage.Count > 0)
+            var result = SearchVehicles(color, wheelCount);
+
+            if (result.Count() > 0)
             {
-                var result = garage.SearchMatchingVehicle(AskForString("Enter registration plate: "));
-
-                if (result != null)
-                {
-                    if (garage.Remove(result) != null)
-                        Log($"Successfully unparked {result}");
-                }
-                else
-                    Log("No matching vehicle found in garage. Has it been stolen? ='(");
+                foreach (var item in result)
+                    Log(item.ToString() + Environment.NewLine);
             }
             else
-                Log("The garage is empty. Did you really park here? :O");
+                Log("No match");
         }
 
-        private static void SearchVehicle(Garage<Vehicle> garage, string color, int wheelCount)
-        {
-            Console.Clear();
-            Console.WriteLine($"{color} vehicle with at least {wheelCount} wheels in the garage:");
-            var matches = garage.SearchVehicle(color, wheelCount);
-            if (matches.Count() > 0)
-            {
-                foreach (var item in matches)
-                    Console.WriteLine(item + System.Environment.NewLine);
-                Console.ReadKey();
-            }
-            else
-                Console.WriteLine("No match");
-        }
+        private static Vehicle[] SearchVehicles(string color, int wheelCount) => garage.SearchVehicle(color, wheelCount);
     }
 }

@@ -83,12 +83,12 @@ namespace Garage
             Console.Clear();
 
             // Debug prints
-            Console.WriteLine($"Capacity: {garage.Capacity}");
-            Console.WriteLine($"First Vehicle: {garage.FirstOrDefault()}");
-            Console.WriteLine();
+            //Console.WriteLine($"Capacity: {garage.Capacity}");
+            //Console.WriteLine($"First Vehicle: {garage.FirstOrDefault()}");
+            //Console.WriteLine();
             // </Debug>
 
-            Console.WriteLine("--| GARAGE 1.0 MAIN MENU |--" + Environment.NewLine);
+            Console.WriteLine("--| GARAGE - MAIN MENU |--" + Environment.NewLine);
             PrintLog();
 
             Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
@@ -126,7 +126,7 @@ namespace Garage
                     quit = true;
                     break;
                 default:
-                    Log("Not a valid choice.");
+                    Log("Not a valid choice");
                     break;
             }
 
@@ -135,8 +135,11 @@ namespace Garage
 
         private static void PrintLog()
         {
-            Console.WriteLine(Environment.NewLine + log);
-            log = "";
+            if (!string.IsNullOrWhiteSpace(log))
+            {
+                Console.WriteLine(Environment.NewLine + log);
+                log = "";
+            }
         }
 
         private static void Log(string message)
@@ -146,7 +149,7 @@ namespace Garage
 
         private static void OpenGarage()
         {
-            Console.WriteLine("--| OPENING NEW GARAGE |--" + Environment.NewLine);
+            Console.WriteLine("--| OPEN NEW GARAGE |--" + Environment.NewLine);
             var capacity = AskForInt("Enter the number of parking slots: ", unsigned: true);
             garage = new Garage<Vehicle>(capacity);
         }
@@ -155,7 +158,7 @@ namespace Garage
         {
             Console.Clear();
 
-            Console.WriteLine("--| PARK VECHICLE |--" + Environment.NewLine);
+            Console.WriteLine("--| PARK VEHICLE |--" + Environment.NewLine);
             PrintLog();
 
             Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
@@ -194,7 +197,7 @@ namespace Garage
                     quit = 1;
                     break;
                 default:
-                    Log("Park Vehicle - default");
+                    Log("Not a valid choice");
                     break;
             }
 
@@ -267,10 +270,50 @@ namespace Garage
             return input.Trim();
         }
 
-        private static void ListVehiclesMenu()
+        private static int ListVehiclesMenu()
         {
             Console.Clear();
-            Console.WriteLine("List vehicles sub menu");
+
+            Console.WriteLine("--| LIST VEHICLES |--" + Environment.NewLine);
+            PrintLog();
+
+            Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
+                + "\n1. List all vehicles parked in the garage"
+                + "\n2. List all different vehicle types and their quantity"
+                + "\n9. Back to previous menu"
+                + "\n0. Quit the application");
+
+            var input = AskForInt("Your choice: ");
+
+            var quit = 0;
+            switch (input)
+            {
+                case 1:
+                    ListAllParkedVechicles();
+                    break;
+                case 0:
+                    quit = 1;
+                    break;
+                default:
+                    Log("Not a valid choice");
+                    break;
+            }
+
+            return quit;
+        }
+
+        private static void ListAllParkedVechicles()
+        {
+            Console.Clear();
+
+            if (garage.Count > 0)
+            {
+                garage.ListAllVehicles();
+            }
+            else
+                Console.WriteLine("The garage is empty");
+
+            Console.WriteLine(Environment.NewLine + "Press any key to return");
             Console.ReadKey();
         }
 
@@ -283,7 +326,7 @@ namespace Garage
 
         private static void UnparkVehicle()
         {
-            Console.WriteLine("--| UNPARK VECHICLE |--" + Environment.NewLine);
+            Console.WriteLine("--| UNPARK VEHICLE |--" + Environment.NewLine);
 
             if (garage.Count > 0)
             {

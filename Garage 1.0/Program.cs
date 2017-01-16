@@ -47,12 +47,7 @@ namespace Garage
             //cityBus.RegisterAsSchoolBus();
             //schoolBus.RegisterAsCityBus();
 
-            //var v1 = garage.SearchVehicle("CAR 345");
-
-            //if (v1 != null)
-            //    Console.WriteLine(v1);
-            //else
-            //    Console.WriteLine("No match");
+            
 
             //var v2 = garage.SearchVehicle("LISA 345");
             //if (v2 != null)
@@ -74,8 +69,8 @@ namespace Garage
             Console.WriteLine("--| GARAGE - MAIN MENU |--" + Environment.NewLine);
             PrintLog();
 
-            Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
-                + "\n1. Open a new Garage (this will replace the current Garage)"
+            Console.WriteLine(
+                "1. Open a new Garage (this will replace the current Garage)"
                 + "\n2. Park a vehicle in the garage"
                 + "\n3. Unpark a parked vehicle"
                 + "\n4. Search for vehicles parked in the garage"
@@ -144,14 +139,14 @@ namespace Garage
             Console.WriteLine("--| PARK VEHICLE |--" + Environment.NewLine);
             PrintLog();
 
-            Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
-                + "\n1. Park an Airplane"
+            Console.WriteLine(
+                "1. Park an Airplane"
                 + "\n2. Park a Motorcycle"
                 + "\n3. Park a Car"
                 + "\n4. Park a Bus"
                 + "\n5. Park a Boat"
                 + "\n9. Back to previous menu"
-                + "\n0. Quit the application");
+                + "\n0. Quit the application\n");
 
             var input = AskForInt("Your choice: ");
 
@@ -260,11 +255,11 @@ namespace Garage
             Console.WriteLine("--| LIST VEHICLES |--" + Environment.NewLine);
             PrintLog();
 
-            Console.WriteLine("Please navigate through the menu by inputting the number \n(1, 2, 3 , 4, 0) of your choice"
-                + "\n1. List all vehicles parked in the garage"
+            Console.WriteLine(
+                "1. List all vehicles parked in the garage"
                 + "\n2. List all different vehicle types and their quantity"
                 + "\n9. Back to previous menu"
-                + "\n0. Quit the application");
+                + "\n0. Quit the application\n");
 
             var input = AskForInt("Your choice: ");
 
@@ -275,7 +270,7 @@ namespace Garage
                     ListAllParkedVechicles();
                     break;
                 case 2:
-                    ListAllVehicleTypes();
+                    ListAllParkedVechicles(groupByType: true);
                     break;
                 case 0:
                     quit = 1;
@@ -288,41 +283,82 @@ namespace Garage
             return quit;
         }
 
-        private static void ListAllParkedVechicles()
+        private static void ListAllParkedVechicles(bool groupByType = false)
         {
             Console.Clear();
 
             if (garage.Count > 0)
             {
-                garage.ListAllVehicles();
+                if (groupByType)
+                    Log(garage.ListVehicleTypes());
+                else
+                    Log(garage.ListAllParkedVehicles());
             }
             else
-                Console.WriteLine("The garage is empty");
-
-            Console.WriteLine(Environment.NewLine + "Press any key to return");
-            Console.ReadKey();
+                Log("The garage is empty");
         }
 
-        private static void ListAllVehicleTypes()
+        private static int SearchVehiclesMenu()
         {
             Console.Clear();
 
-            if (garage.Count > 0)
+            Console.WriteLine("--| SEARCH VEHICLES |--" + Environment.NewLine);
+            PrintLog();
+
+            Console.WriteLine(
+                "1. Search vehicle by registration number"
+                + "\n2. Search vehicle by color and number of wheels"
+                + "\n9. Back to previous menu"
+                + "\n0. Quit the application\n");
+
+            var input = AskForInt("Your choice: ");
+
+            var quit = 0;
+            switch (input)
             {
-                garage.ListVehicleTypes();
+                case 1:
+                    Console.Clear();
+                    SearchVehicleByRegistrationPlate();
+                    break;
+                case 2:
+                    break;
+                case 0:
+                    quit = 1;
+                    break;
+                default:
+                    Log($"\"{input}\" is not a valid choice");
+                    break;
             }
-            else
-                Console.WriteLine("The garage is empty");
 
-            Console.WriteLine(Environment.NewLine + "Press any key to return");
-            Console.ReadKey();
+            return quit;
         }
 
-        private static void SearchVehiclesMenu()
+        private static void SearchVehicleByRegistrationPlate()
         {
-            Console.Clear();
-            Console.WriteLine("List vehicles sub menu");
-            Console.ReadKey();
+            var registrationPlate = AskForString("Enter registration plate: ");
+            var vehicle = garage.SearchMatchingVehicle(registrationPlate);
+
+            if (vehicle != null)
+            {
+                Log("Matching vehicle");
+                Log(vehicle.ToString());
+            }
+            else
+            {
+                var result = garage.SearchVehiclesContains(registrationPlate);
+                
+
+                if (result.Count() > 0)
+                {
+                    Log($"Vehicles that contain: \"{registrationPlate}\"");
+                    foreach (var item in result)
+                    {
+                        Log(item.ToString());
+                    }
+                }
+                else
+                    Log("Found no match");
+            }
         }
 
         private static void UnparkVehicle()
@@ -331,7 +367,7 @@ namespace Garage
 
             if (garage.Count > 0)
             {
-                var result = garage.SearchVehicle(AskForString("Enter registration plate: "));
+                var result = garage.SearchMatchingVehicle(AskForString("Enter registration plate: "));
 
                 if (result != null)
                 {

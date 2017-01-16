@@ -51,17 +51,17 @@ namespace Garage
             return null;
         }
 
-        public void ListAllVehicles() // change return type to string? ListParkedVehicles?
+        public string ListAllParkedVehicles()
         {
-            Console.WriteLine("Listing all vehicles");
+            var printedList = $"Listing all {Count} parked vehicles {Environment.NewLine}";
+
             foreach (var vehicle in vehicles.Where(v => v != null))
-            {
-                Console.WriteLine(vehicle);
-                Console.WriteLine();
-            }
+                printedList += Environment.NewLine + vehicle.ToString() + Environment.NewLine;
+
+            return printedList;
         }
 
-        public void ListVehicleTypes()
+        public string ListVehicleTypes()
         {
             var types = vehicles
                 .Where(v => v != null)
@@ -72,9 +72,10 @@ namespace Garage
                     Vehicle = v.Key
                 })
                 .OrderBy(x => x.Vehicle)
-                .OrderByDescending(x => x.Count);                
+                .OrderByDescending(x => x.Count);
 
-            Console.WriteLine($"{Count} vehicles is stored in the garage{System.Environment.NewLine}");
+            var printedList = $"{Count} vehicles is stored in the garage {Environment.NewLine}{Environment.NewLine}";
+
             foreach (var type in types)
             {
                 string s = "";
@@ -83,17 +84,30 @@ namespace Garage
                     if (type.Vehicle == "Bus") s = "es";
                     else s = "s";
                 }
-                Console.WriteLine($"{type.Count} {type.Vehicle}{s}");
+                printedList += $"{type.Count} {type.Vehicle}{s} {Environment.NewLine}";
             }
+
+            return printedList;
         }
         
-        public Vehicle SearchVehicle(string registrationPlate)
+        public Vehicle SearchMatchingVehicle(string registrationPlate)
         {
             var match = vehicles
-                .Where(v => v != null && v.RegistrationPlate.Equals(registrationPlate))
+                .Where(v => v != null)
+                .Where(v => v.RegistrationPlate.Equals(registrationPlate.ToUpperInvariant()))
                 .FirstOrDefault();
 
             return match;
+        }
+
+        public Vehicle[] SearchVehiclesContains(string registrationPlate)
+        {
+            var matches = vehicles
+                .Where(v => v != null)
+                .Where(v => v.RegistrationPlate.Contains(registrationPlate.ToUpperInvariant()))
+                .ToArray();
+
+            return matches;
         }
 
         // Möjlighet att söka efter ett flertal fordon på ett flertal valfria variabler.

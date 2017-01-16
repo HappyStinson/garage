@@ -21,7 +21,10 @@
         public override string ToString()
         {
             var busType = IsSchoolBus ? "School bus" : "City bus";
-            return string.Format("{1}:{0}{2}{0}{3} seats", System.Environment.NewLine, busType, base.ToString(), Seats);
+            var seats = Seats > 1 ? "seats" : "seat";
+            return string.Format("{1}:{0}{2}{0}{3} {4}",
+                System.Environment.NewLine,
+                busType, base.ToString(), Seats, seats);
         }
     }
 }

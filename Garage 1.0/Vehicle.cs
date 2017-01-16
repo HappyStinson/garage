@@ -2,15 +2,15 @@
 {
     internal abstract class Vehicle
     {
-        public string RegistrationPlate { get; set; } // readonly?
-        public string Color { get; set; } // refactor to enum later? Change text to display as ConsoleColor
+        public string RegistrationPlate { get; set; }
+        public string Color { get; set; }
         public int WheelCount { get; set; }
 
         public Vehicle(string registrationPlate, string color, int wheelCount)
         {
             RegistrationPlate = registrationPlate.ToUpperInvariant();
             Color = color.ToLowerInvariant();
-            WheelCount = wheelCount;
+            WheelCount = wheelCount < 0 ? 0 : wheelCount;
         }
 
         public override string ToString()

@@ -4,7 +4,7 @@
     {
         public enum FuelType
         {
-            BadInput,
+            Hemp,
             Gasoline,
             Diesel,
             Electric,

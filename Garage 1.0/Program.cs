@@ -180,7 +180,10 @@ namespace Garage
         {
             Console.WriteLine("-- PARK AIRPLANE --" + Environment.NewLine);
             var properties = AskForVehicleProperties(mandatoryWheels: false);
+
             var engineCount = AskForInt("Enter the number of engines: ");
+            if (engineCount < 0)
+                engineCount = 0;
 
             var airplane = new Airplane(properties.RegistrationPlate,
                                         properties.Color,
@@ -273,7 +276,7 @@ namespace Garage
                 case 4:
                     return Car.FuelType.Ethanol;
                 default:
-                    return Car.FuelType.BadInput;
+                    return Car.FuelType.Hemp;
             }
         }
 

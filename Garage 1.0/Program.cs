@@ -9,8 +9,15 @@ namespace Garage
         public string Color;
         public int WheelCount;
 
-        public VehicleProperties(string registrationPlate,
-                          string color, int wheelCount)
+        public VehicleProperties(string registrationPlate, string color)
+        {
+            RegistrationPlate = registrationPlate;
+            Color = color;
+            WheelCount = 0;
+        }
+
+        public VehicleProperties(string registrationPlate, string color,
+                                 int wheelCount)
         {
             RegistrationPlate = registrationPlate;
             Color = color;
@@ -157,9 +164,9 @@ namespace Garage
                     Console.Clear();
                     ParkAirplane();
                     break;
-                //case 2:
-                //    ParkMotorcycle();
-                //    break;
+                case 2:
+                    ParkMotorcycle();
+                    break;
                 //case 3:
                 //    ParkCar();
                 //    break;
@@ -195,6 +202,61 @@ namespace Garage
             garage.Add(airplane);
         }
 
+        private static VehicleProperties AskForVehicleProperties(bool mandatoryWheels = true)
+        {
+            var registrationPlate = AskForString("Enter registration plate: ");
+            var color = AskForString("Enter color: ");
+            var wheelCount = AskForInt("Enter the number of wheels: ", mandatoryWheels);
+
+            var properties = new VehicleProperties(registrationPlate,
+                                                   color, wheelCount);
+            return properties;
+        }
+
+        private static void ParkMotorcycle()
+        {
+            Console.WriteLine("-- PARK MOTORCYCLE --" + Environment.NewLine);
+            var properties = AskForVehicleProperties();
+            var engineCC = AskForFloat("Enter the engine cylinder volume (cc): ");
+
+            var motorcycle = new Motorcycle(properties.RegistrationPlate,
+                                          properties.Color, engineCC);
+            garage.Add(motorcycle);
+        }
+
+        private static VehicleProperties AskForVehicleProperties()
+        {
+            var registrationPlate = AskForString("Enter registration plate: ");
+            var color = AskForString("Enter color: ");
+
+            return new VehicleProperties(registrationPlate, color);
+        }
+
+        private static float AskForFloat(string message)
+        {
+            float value;
+            bool parsed = false;
+            string error = "";
+
+            do
+            {
+                string input = AskForString(error + message);
+                parsed = float.TryParse(input,
+                                        System.Globalization.NumberStyles.Any,
+                                        System.Globalization.CultureInfo.InvariantCulture,
+                                        out value);
+
+                if (value < 1)
+                {
+                    parsed = false;
+                    error = "\nIncorrect input. You must enter a positive number.\n";
+                }
+
+            } while (!parsed);
+
+            return value;
+        }
+
         private static void UnparkVehicle()
         {
             Console.WriteLine("--| UNPARK VEHICLE |--" + Environment.NewLine);
@@ -213,17 +275,6 @@ namespace Garage
             }
             else
                 Log("The garage is empty. Did you really park here? :O");
-        }
-
-        private static VehicleProperties AskForVehicleProperties(bool mandatoryWheels = true)
-        {
-            var registrationPlate = AskForString("Enter registration plate: ");
-            var color = AskForString("Enter color: ");
-            var wheelCount = AskForInt("Enter the number of wheels: ", mandatoryWheels);
-
-            var properties = new VehicleProperties(registrationPlate,
-                                                   color, wheelCount);
-            return properties;
         }
 
         private static int AskForInt(string question, bool unsigned = false)

@@ -66,13 +66,15 @@ namespace Garage
             var types = vehicles
                 .Where(v => v != null)
                 .GroupBy(v => v.GetType().Name)
-                .Select(v => new {
+                .Select(v => new
+                {
                     Count = v.Count(),
                     Vehicle = v.Key
                 })
-                .OrderByDescending(x => x.Count);
+                .OrderBy(x => x.Vehicle)
+                .OrderByDescending(x => x.Count);                
 
-            Console.WriteLine($"{Count} vehicles is stored in the Garage{System.Environment.NewLine}");
+            Console.WriteLine($"{Count} vehicles is stored in the garage{System.Environment.NewLine}");
             foreach (var type in types)
             {
                 string s = "";

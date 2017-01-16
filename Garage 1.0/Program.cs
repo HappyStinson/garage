@@ -25,44 +25,27 @@ namespace Garage
 
         static void Main(string[] args)
         {
+            garage.Add(new Airplane("DEVIL 666", "REd", 666, 666));
+            garage.Add(new Motorcycle("VR 46", "Valencia YeLloW", 1000));
+            garage.Add(new Car("CAR 345", "blUE", FuelType.Diesel));
+            garage.Add(new Car("TESLA 345", "SilVeR", FuelType.Electric));
+            garage.Add(new Car("ford focus rs", "orange", FuelType.Gasoline));
+            garage.Add(new Boat("MARY 35", "Silver", 35f, isSailingBoat: true));
+            garage.Add(new Boat("LISA 125", "brOwn", 12.5f));
+
+            var cityBus = new Bus("CITY LINE 10", "Leaf GrEen", 45);
+            var schoolBus = new Bus("WEST ELEMENTARY", "Yellow", 25, isSchoolBus: true);
+            garage.Add(cityBus);
+            garage.Add(schoolBus);
+
             var quit = false;
             do
             {
                 quit = MainMenu();
             } while (quit != true);
 
-
-
-
-            //garage.Add(new Airplane("DEVIL 666", "REd", 666, 666));
-            //garage.Add(new Motorcycle("VR 46", "Valencia YeLloW", 1000));
-            //garage.Add(new Car("CAR 345", "blUE", FuelType.Diesel));
-            //garage.Add(new Car("TESLA 345", "SilVeR", FuelType.Electric));
-            //garage.Add(new Boat("MARY 35", "Silver", 35f, isSailingBoat: true));
-            //garage.Add(new Boat("LISA 125", "brOwn", 12.5f));
-
-            //var cityBus = new Bus("CITY LINE 10", "Leaf GrEen", 45);
-            //var schoolBus = new Bus("WEST ELEMENTARY", "Yellow", 25, isSchoolBus: true);
-            //garage.Add(cityBus);
-            //garage.Add(schoolBus);
-
-            //SearchVehicle(garage, "YeLloW", 0);
-            //SearchVehicle(garage, "yellow", 2);
-            //SearchVehicle(garage, "Yellow", 2);
-            //SearchVehicle(garage, "YELLOW", 2);
-            //SearchVehicle(garage, "Black", 2);
-            //SearchVehicle(garage, "red", 2);
-            //SearchVehicle(garage, "green", 2);
-            //SearchVehicle(garage, "browN", 2);
-
-            //garage.ListAllVehicles();
-
             //cityBus.RegisterAsSchoolBus();
             //schoolBus.RegisterAsCityBus();
-
-            ////garage.ListAllVehicles();
-
-            //garage.ListVehicleTypes();
 
             //var v1 = garage.SearchVehicle("CAR 345");
 
@@ -291,6 +274,9 @@ namespace Garage
                 case 1:
                     ListAllParkedVechicles();
                     break;
+                case 2:
+                    ListAllVehicleTypes();
+                    break;
                 case 0:
                     quit = 1;
                     break;
@@ -309,6 +295,21 @@ namespace Garage
             if (garage.Count > 0)
             {
                 garage.ListAllVehicles();
+            }
+            else
+                Console.WriteLine("The garage is empty");
+
+            Console.WriteLine(Environment.NewLine + "Press any key to return");
+            Console.ReadKey();
+        }
+
+        private static void ListAllVehicleTypes()
+        {
+            Console.Clear();
+
+            if (garage.Count > 0)
+            {
+                garage.ListVehicleTypes();
             }
             else
                 Console.WriteLine("The garage is empty");

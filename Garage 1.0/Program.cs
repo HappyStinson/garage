@@ -52,16 +52,8 @@ namespace Garage
         private static bool MainMenu()
         {
             Console.Clear();
-
-            // Debug prints
-            //Console.WriteLine($"Capacity: {garage.Capacity}");
-            //Console.WriteLine($"First Vehicle: {garage.FirstOrDefault()}");
-            //Console.WriteLine();
-            // </Debug>
-
+            PrintLog(wait: true);
             Console.WriteLine("--| GARAGE - MAIN MENU |--" + Environment.NewLine);
-            PrintLog();
-
             Console.WriteLine(
                 "1. Open a new Garage (this will replace the current Garage)"
                 + "\n2. Park a vehicle in the garage"
@@ -99,16 +91,18 @@ namespace Garage
                     Log("Not a valid choice");
                     break;
             }
-
             return quit;
         }
 
-        private static void PrintLog()
+        private static void PrintLog(bool wait = false)
         {
             if (!string.IsNullOrWhiteSpace(log))
             {
                 Console.WriteLine(Environment.NewLine + log);
                 log = "";
+
+                if (wait)
+                    Console.ReadKey();
             }
         }
 
@@ -151,20 +145,17 @@ namespace Garage
                 switch (input)
                 {
                     case 1:
-                        Console.Clear();
                         ParkAirplane();
                         break;
                     case 2:
-                        Console.Clear();
                         ParkMotorcycle();
                         break;
                     case 3:
-                        Console.Clear();
                         ParkCar();
                         break;
-                    //case 4:
-                    //    ParkBus();
-                    //    break;
+                    case 4:
+                        ParkBus();
+                        break;
                     //case 5:
                     //    ParkBoat();
                     //    break;
@@ -178,7 +169,6 @@ namespace Garage
                         break;
                 }
             }
-
             return quit;
         }
 
@@ -193,6 +183,7 @@ namespace Garage
 
         private static void ParkAirplane()
         {
+            Console.Clear();
             Console.WriteLine("-- PARK AIRPLANE --" + Environment.NewLine);
             var properties = AskForVehicleProperties(mandatoryWheels: false);
             var engineCount = AskForInt("Enter the number of engines: ");
@@ -217,6 +208,7 @@ namespace Garage
 
         private static void ParkMotorcycle()
         {
+            Console.Clear();
             Console.WriteLine("-- PARK MOTORCYCLE --" + Environment.NewLine);
             var properties = AskForVehicleProperties();
             var engineCC = AskForFloat("Enter the engine cylinder volume (cc): ");
@@ -261,6 +253,7 @@ namespace Garage
 
         private static void ParkCar()
         {
+            Console.Clear();
             Console.WriteLine("-- PARK CAR --" + Environment.NewLine);
             var properties = AskForVehicleProperties();
             var fuelType = AskForFuelType();
@@ -290,6 +283,29 @@ namespace Garage
                 default:
                     return Car.FuelType.BadInput;
             }
+        }
+
+        private static void ParkBus()
+        {
+            Console.Clear();
+            Console.WriteLine("-- PARK BUS --" + Environment.NewLine);
+
+            var properties = AskForVehicleProperties();
+            if (properties.WheelCount < 4)
+                properties.WheelCount = 4;
+
+            var seats = AskForInt("Enter the number of seats: ", unsigned: true);
+            if (seats < 1)
+                seats = 1;
+
+            var isSchoolBus = false;
+            var answer = AskForInt("Enter category (1 = School bus, 2 = City bus: )");
+            if (answer == 1)
+                isSchoolBus = true;
+
+            var bus = new Bus(properties.RegistrationPlate, properties.Color,
+                              seats, isSchoolBus);
+            garage.Add(bus);
         }
 
         private static void UnparkVehicle()

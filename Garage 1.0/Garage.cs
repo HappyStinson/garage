@@ -51,6 +51,8 @@ namespace Garage
             return null;
         }
 
+        public bool IsFull() => Count == Capacity;
+
         public string ListAllParkedVehicles()
         {
             var printedList = $"Listing all {Count} parked vehicles {Environment.NewLine}";

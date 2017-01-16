@@ -1,34 +1,35 @@
 ﻿namespace Garage
 {
-    public enum FuelType
-    {
-        Gasoline,
-        Diesel,
-        Electric,
-        Ethanol
-    }
-
     class Car : Vehicle
     {
-        public FuelType FuelType { get; set; }
+        public enum FuelType
+        {
+            BadInput,
+            Gasoline,
+            Diesel,
+            Electric,
+            Ethanol
+        }
+
+        public FuelType Fuel { get; set; }
 
         public Car(string registrationPlate, string color, FuelType fuelType)
             : base(registrationPlate, color, wheelCount: 4)
         {
-            FuelType = fuelType;
+            Fuel = fuelType;
         }
 
         public override string ToString()
         {
-            return System.String.Format("Car:{0}{1}{0}Engine runs on {2}", System.Environment.NewLine, base.ToString(), FormatFuelType());
+            return string.Format("Car:{0}{1}{0}Engine runs on {2}", System.Environment.NewLine, base.ToString(), FormatFuelType());
         }
 
         private string FormatFuelType()
         {
-            var fuelTypeString = FuelType.ToString();
+            var fuelTypeString = Fuel.ToString();
             var formatted = char.ToLowerInvariant(fuelTypeString[0]) + fuelTypeString.Substring(1);
 
-            if (FuelType == FuelType.Electric)
+            if (Fuel == FuelType.Electric)
                 formatted += "ity"; // Electric -> electricity
 
             return formatted;

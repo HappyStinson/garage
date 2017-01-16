@@ -34,33 +34,19 @@ namespace Garage
         {
             garage.Add(new Airplane("DEVIL 666", "REd", 666, 666));
             garage.Add(new Motorcycle("VR 46", "Valencia YeLloW", 1000));
-            garage.Add(new Car("CAR 345", "blUE", FuelType.Diesel));
-            garage.Add(new Car("TESLA 345", "SilVeR", FuelType.Electric));
-            garage.Add(new Car("ford focus rs", "orange", FuelType.Gasoline));
+            garage.Add(new Car("CAR 345", "blUE", Car.FuelType.Diesel));
+            garage.Add(new Car("TESLA 345", "SilVeR", Car.FuelType.Electric));
+            garage.Add(new Car("ford focus rs", "orange", Car.FuelType.Gasoline));
             garage.Add(new Boat("MARY 35", "Silver", 35f, isSailingBoat: true));
             garage.Add(new Boat("LISA 125", "brOwn", 12.5f));
-
-            var cityBus = new Bus("CITY LINE 10", "Leaf GrEen", 45);
-            var schoolBus = new Bus("WEST ELEMENTARY", "Yellow", 25, isSchoolBus: true);
-            garage.Add(cityBus);
-            garage.Add(schoolBus);
+            garage.Add(new Bus("CITY LINE 10", "Leaf GrEen", 45));
+            garage.Add(new Bus("WEST ELEMENTARY", "Yellow", 25, isSchoolBus: true));
 
             var quit = false;
             do
             {
                 quit = MainMenu();
             } while (quit != true);
-
-            //cityBus.RegisterAsSchoolBus();
-            //schoolBus.RegisterAsCityBus();
-
-            
-
-            //var v2 = garage.SearchVehicle("LISA 345");
-            //if (v2 != null)
-            //    Console.WriteLine(v2);
-            //else
-            //    Console.WriteLine("No match");
         }
 
         private static bool MainMenu()
@@ -95,7 +81,6 @@ namespace Garage
                     break;
                 case 2:
                     ParkVehicleMenu();
-                    //ParkAirplane();
                     break;
                 case 3:
                     Console.Clear();
@@ -142,56 +127,73 @@ namespace Garage
         private static int ParkVehicleMenu()
         {
             Console.Clear();
-
             Console.WriteLine("--| PARK VEHICLE |--" + Environment.NewLine);
             PrintLog();
-
-            Console.WriteLine(
-                "1. Park an Airplane"
-                + "\n2. Park a Motorcycle"
-                + "\n3. Park a Car"
-                + "\n4. Park a Bus"
-                + "\n5. Park a Boat"
-                + "\n9. Back to previous menu"
-                + "\n0. Quit the application\n");
-
-            var input = AskForInt("Your choice: ");
+            LogGarageSlotInfo();
 
             var quit = 0;
-            switch (input)
+
+            if (!garage.IsFull())
             {
-                case 1:
-                    Console.Clear();
-                    ParkAirplane();
-                    break;
-                case 2:
-                    ParkMotorcycle();
-                    break;
-                //case 3:
-                //    ParkCar();
-                //    break;
-                //case 4:
-                //    ParkBus();
-                //    break;
-                //case 5:
-                //    ParkBoat();
-                //    break;
-                //case 9:
-                //    break;
-                case 0:
-                    quit = 1;
-                    break;
-                default:
-                    Log("Not a valid choice");
-                    break;
+                PrintLog();
+
+                Console.WriteLine(
+                    "1. Park an Airplane"
+                    + "\n2. Park a Motorcycle"
+                    + "\n3. Park a Car"
+                    + "\n4. Park a Bus"
+                    + "\n5. Park a Boat"
+                    + "\n9. Back to previous menu"
+                    + "\n0. Quit the application\n");
+
+                var input = AskForInt("Your choice: ");
+
+                switch (input)
+                {
+                    case 1:
+                        Console.Clear();
+                        ParkAirplane();
+                        break;
+                    case 2:
+                        Console.Clear();
+                        ParkMotorcycle();
+                        break;
+                    case 3:
+                        Console.Clear();
+                        ParkCar();
+                        break;
+                    //case 4:
+                    //    ParkBus();
+                    //    break;
+                    //case 5:
+                    //    ParkBoat();
+                    //    break;
+                    //case 9:
+                    //    break;
+                    case 0:
+                        quit = 1;
+                        break;
+                    default:
+                        Log("Not a valid choice");
+                        break;
+                }
             }
 
             return quit;
         }
 
+        private static void LogGarageSlotInfo()
+        {
+            var availableSlots = garage.Capacity - garage.Count;
+            Log($"{availableSlots}/{garage.Capacity} parking slots available");
+
+            if (availableSlots == 0)
+                Log("The garage is full. Come back later or unpark a vehicle");
+        }
+
         private static void ParkAirplane()
         {
-            Console.WriteLine("-- PARKING AIRPLANE --" + Environment.NewLine);
+            Console.WriteLine("-- PARK AIRPLANE --" + Environment.NewLine);
             var properties = AskForVehicleProperties(mandatoryWheels: false);
             var engineCount = AskForInt("Enter the number of engines: ");
 
@@ -255,6 +257,39 @@ namespace Garage
             } while (!parsed);
 
             return value;
+        }
+
+        private static void ParkCar()
+        {
+            Console.WriteLine("-- PARK CAR --" + Environment.NewLine);
+            var properties = AskForVehicleProperties();
+            var fuelType = AskForFuelType();
+
+            var car = new Car(properties.RegistrationPlate,
+                                         properties.Color,
+                                         fuelType);
+            garage.Add(car);
+        }
+
+        private static Car.FuelType AskForFuelType()
+        {
+            var message = "Enter fuel type "
+                + "(1 = Gasoline, 2 = Diesel, 3 = Electric, 4 = Ethanol): ";
+            var fuelType = AskForInt(message);
+
+            switch (fuelType)
+            {
+                case 1:
+                    return Car.FuelType.Gasoline;
+                case 2:
+                    return Car.FuelType.Diesel;
+                case 3:
+                    return Car.FuelType.Electric;
+                case 4:
+                    return Car.FuelType.Ethanol;
+                default:
+                    return Car.FuelType.BadInput;
+            }
         }
 
         private static void UnparkVehicle()
